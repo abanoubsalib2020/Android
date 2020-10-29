@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tracker.welcome">
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter your Phone Number"
+        android:textColor="#445a71"
+        android:textSize="20dp"
+        android:id="@+id/enter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        />
+    <EditText
+        android:hint="Phone Number             "
+        android:id="@+id/get_the_number"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter"
+        android:layout_marginTop="30dp"
+        />
+
+    <ImageView
+        android:id="@+id/image_tracker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/tracker"
+        app:layout_constraintTop_toBottomOf="@id/get_the_number"
+        app:layout_constraintBottom_toTopOf="@id/tracker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="THE TRACKER"
+        android:textColor="#3f4954"
+        android:textSize="20dp"
+        android:id="@+id/tracker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_tracker"
+        app:layout_constraintBottom_toTopOf="@id/next"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
+        android:text="next"
+        android:backgroundTint="#cfcc95"
+        android:textColor="#878566"
+        android:id="@+id/next"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="40dp"
+       />
+</androidx.constraintlayout.widget.ConstraintLayout>
