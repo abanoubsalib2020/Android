@@ -28,6 +28,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.SetOptions;
 
@@ -36,7 +38,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class tracker extends Service {
+public class trackerService extends Service {
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -50,6 +52,10 @@ public class tracker extends Service {
 
     private Boolean mRequestingLocationUpdates;
     private String mLastUpdateTime;
+
+    private FirebaseFirestore firestoredb ;
+    private DocumentReference my_number ;
+    private String My_number;
 
 
 
@@ -65,10 +71,12 @@ public class tracker extends Service {
         @Override
         public void handleMessage(Message msg) {
 
+            firestoredb = FirebaseFirestore.getInstance();
+            my_number = firestoredb.collection("users").document(My_number);
             mRequestingLocationUpdates = true;
             mLastUpdateTime = "";
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(tracker.this);
-            mSettingsClient = LocationServices.getSettingsClient(tracker.this);
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(trackerService.this);
+            mSettingsClient = LocationServices.getSettingsClient(trackerService.this);
             createLocationCallback();
             createLocationRequest();
             buildLocationSettingsRequest();
@@ -82,16 +90,12 @@ public class tracker extends Service {
 
     @Override
     public void onCreate() {
-        // Start up the thread running the service. Note that we create a
-        // separate thread because the service normally runs in the process's
-        // main thread, which we don't want to block. We also make it
-        // background priority so CPU-intensive work doesn't disrupt our UI.
+
         HandlerThread thread = new HandlerThread("ServiceStartArguments",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
 
 
-        // Get the HandlerThread's Looper and use it for our Handler
         serviceLooper = thread.getLooper();
         serviceHandler = new ServiceHandler(serviceLooper);
 
@@ -104,24 +108,20 @@ public class tracker extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+        My_number = intent.getStringExtra("mynumber");
 
 
-
-        // For each start request, send a message to start a job and deliver the
-        // start ID so we know which request we're stopping when we finish the job
         Message msg = serviceHandler.obtainMessage();
         msg.arg1 = startId;
         serviceHandler.sendMessage(msg);
 
 
 
-        // If we get killed, after returning from here, restart
         return START_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // We don't provide binding, so return null
         return null;
     }
 
@@ -168,18 +168,13 @@ public class tracker extends Service {
                 GeoPoint mylocation = new GeoPoint(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
                Map<String, Object> data = new HashMap<>();
                 data.put("location",mylocation);
-                MainActivity.my_number
-                        .set(data, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                my_number.set(data, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-
-                    }
-                })
-                        .addOnFailureListener(new OnFailureListener() {
+                    }}).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                            }
-                        });
+                            }});
   //              updateLocationUI();
 
             }
@@ -213,9 +208,6 @@ public class tracker extends Service {
                     }
                 });
     }
-
-
-
 
 
 

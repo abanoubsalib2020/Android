@@ -10,10 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.tracker.R;
 
-
-public class welcome extends AppCompatActivity {
+public class Get_INFO_Activity extends AppCompatActivity {
     TextView textView;
     Button button ;
     EditText editText;
@@ -34,9 +32,10 @@ public class welcome extends AppCompatActivity {
                     SharedPreferences.Editor edit = sharedPref.edit();
                     edit.putString("mynumber",number);
                     edit.commit();
-                    Intent i = new Intent(welcome.this, MainActivity.class);
+                    Intent i = new Intent(Get_INFO_Activity.this, MainActivity.class);
                     i.putExtra("mynumber",number);
-                    welcome.this.startActivity(i);
+                    Get_INFO_Activity.this.startActivity(i);
+
                 }
             });
 

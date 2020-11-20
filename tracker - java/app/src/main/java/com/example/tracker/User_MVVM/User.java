@@ -1,30 +1,32 @@
-package com.example.tracker;
+package com.example.tracker.User_MVVM;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Arrays;
 import java.util.List;
-@Entity(tableName = "USERS")
+@Entity()
 public class User {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
-    @ColumnInfo(name = "Number")
     public String Number;
-    @ColumnInfo(name = "Name")
     public String Name;
+
+    @Ignore
     public String Status;   //online    or offline
+    @Ignore
     public String Request_status;   //not_requested or  requested or rejected or accepted
+    @Ignore
     public Boolean Request_Result;
 
 
 
-    public User(String number, String name, String status) {
+    public User(String number, String name) {
         Number = number;
         Name = name;
-        this.Status = status;
+        this.Status = "offline";
         Request_status = "not_requested";
     }
 
@@ -39,6 +41,12 @@ public class User {
         Request_status = (request_Result) ?  "accepted": "rejected" ;
     }
 
+    public void Is_online(Boolean Is_online)
+    {
+        this.Status = (Is_online) ? "online": "offline" ;
+        if(Is_online == false)
+         this.Request_status = "not_requested";
+    }
 
 
     @NonNull
@@ -50,6 +58,6 @@ public class User {
     public static User toObject(String StringObject)
     {
         List<String> s = Arrays.asList(StringObject.split("/"));
-        return new User(s.get(0), s.get(1), s.get(2));
+        return new User(s.get(0), s.get(1));
     }
 }

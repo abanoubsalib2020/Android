@@ -1,4 +1,4 @@
-package com.example.tracker;
+package com.example.tracker.User_MVVM;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,10 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tracker.MainActivity;
+import com.example.tracker.MapsActivity;
 import com.example.tracker.R;
 
 import java.util.ArrayList;
@@ -36,33 +39,25 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                 @Override
                 public void onClick(View v) {
                     User current = (User) username.getTag();
-                    if(current.Request_status.equals("not_requested")) {
-                        current.Request_status = "requested" ;
-                        MainActivity.request_tracking_some_one(current.Number);
-                        notifyDataSetChanged();
+                    if(current.Request_status.equals("not_requested") || current.Request_status.equals("rejected")) {
+                        if(current.Status.equals("online") == true )
+                            MainActivity.userViewModel.Request_track_some_one(current.Number);
+                        else
+                            Toast.makeText(v.getContext(), "user is offline you can't request tracking this user", Toast.LENGTH_SHORT).show();
                     }
                     if(current.Request_status.equals("accepted")) {
                         Intent intent = new Intent(v.getContext(), MapsActivity.class);
-    //                    intent.putExtra("data",current.toString());
                         List<String> users_data = new ArrayList<String>();
                         users_data.add(current.toString());
                         intent.putStringArrayListExtra("data_list", (ArrayList<String>) users_data);
                         v.getContext().startActivity(intent);
-
-                    }
-                    if(current.Request_status.equals("rejected"))
-                    {
-                        current.Request_status = "requested" ;
-                        MainActivity.request_tracking_some_one(current.Number);
-                        notifyDataSetChanged();
                     }
                 }
             });
-
         }
     }
 
-    public List<User> Users = Arrays.asList();
+    private List<User> Users = Arrays.asList();
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -81,9 +76,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         holder.usernumber.setText(Users.get(position).Number);
 
         if (Users.get(position).Request_status != null) {
-            if (Users.get(position).Request_status.equals("Not_Requested")) {
-                holder.request.setActivated(false);
+            if (Users.get(position).Request_status.equals("not_requested")) {
+                holder.request.setText("request");
                 holder.request.setBackgroundColor(Color.parseColor("#8597ab"));
+                holder.request.setActivated(true);
+                if (Users.get(position).Status.equals("offline") == true )
+                    holder.request.setActivated(false);
+
             } else if (Users.get(position).Request_status.equals("requested")) {
 
                 holder.request.setActivated(false);
@@ -108,49 +107,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         return Users.size();
     }
 
-    // update requests stuts   from mainactivity to userlist
-    public void on_receiving_request_result(String phone_number,  boolean permission)
+    public void setUsers (List<User> users)
     {
-
-        for (int i = 0 ; i < Users.size() ; i++)
-        {
-            if (Users.get(i).Number.equals(phone_number))
-            {
-                Users.get(i).set_Request_status(permission);
-            }
-        }
-        notifyDataSetChanged();
-    }
-/*
-    public  void  add_new_user(User user)
-    {
-        Users.add(user);
-        notifyDataSetChanged();
-    }
-*/
-    public void first_reload()
-    {
-        Users =  MainActivity.database.getUserDao().get_all_users();
-        for (int i = 0 ; i < Users.size() ; i++)
-        {
-            Users.get(i).Status = "offline";
-            Users.get(i).Request_status = "not_requested";
-        }
-
+        this.Users = users;
         notifyDataSetChanged();
     }
 
-    User get_user_by_user_number(String user_number)
-    {
-        for (int i = 0 ; i < Users.size() ; i++)
-        {
-            if (Users.get(i).Number.equals(user_number))
-            {
-                return  Users.get(i);
-            }
-        }
-        return null;
-    }
 
 
 }

@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.tracker.welcome">
+        <activity android:name="com.example.tracker.Get_INFO_Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +39,7 @@
             android:name="com.example.tracker.MapsActivity"
             android:label="@string/title_activity_maps" />
 
-        <service android:name="com.example.tracker.tracker" />
+        <service android:name="com.example.tracker.trackerService" />
     </application>
 
 </manifest>
