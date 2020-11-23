@@ -1,4 +1,4 @@
-package com.example.whatsapp.conversation;
+package com.example.whatsapp.MVVM_conversations;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.whatsapp.MainActivity;
 import com.example.whatsapp.R;
-import com.example.whatsapp.message.Chat_Activity;
+import com.example.whatsapp.MVVM_Chat.Chat_Activity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,16 +36,15 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                 public void onClick(View v) {
                     Conversation current = (Conversation)v.getTag();
                     Intent intent = new Intent(v.getContext(), Chat_Activity.class);
-                    intent.putExtra("conversationNumber",current.conversationNumber);
+                    intent.putExtra("conversationNumber",current.getConversationNumber());
+                    intent.putExtra("conversationName",current.getConversationName());
                     v.getContext().startActivity(intent);
                 }
             });
         }
 
     }
-    List<Conversation> conversations =  Arrays.asList(
-
-    );
+    private List<Conversation> conversations =  Arrays.asList();
 
     @NonNull
     @Override
@@ -58,25 +56,23 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public void onBindViewHolder(@NonNull ConversationViewHolder holder, int position) {
         holder.itemView.setTag(conversations.get(position));
-        if(conversations.get(position).conversationName == null )
-            holder.Name.setText( conversations.get(position).conversationNumber);
-        else holder.Name.setText( conversations.get(position).conversationName);
+        if(conversations.get(position).getConversationName() == null || conversations.get(position).getConversationName().equals("") )
+            holder.Name.setText( conversations.get(position).getConversationNumber());
+        else holder.Name.setText( conversations.get(position).getConversationName());
 
-        if (conversations.get(position).lastMessage.length() > 20)
-            holder.LastMessage.setText(conversations.get(position).lastMessage.substring(0,20));
-            else
-            holder.LastMessage.setText(conversations.get(position).lastMessage);
 
-        holder.LastMessageTime.setText(conversations.get(position).lastMessageTime);
+            holder.LastMessage.setText(conversations.get(position).getLastMessage());
+            holder.LastMessageTime.setText(conversations.get(position).getLastMessageTime());
     }
 
     @Override
     public int getItemCount() {
         return conversations.size();
     }
-    public void reload()
+
+    public void setConversations(List<Conversation> conversations)
     {
-        conversations =  MainActivity.database.getConversationDao().getAllConversations();
+        this.conversations = conversations;
         notifyDataSetChanged();
     }
 

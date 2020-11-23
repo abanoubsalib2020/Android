@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.whatsapp.select_contact">
+    tools:context="com.example.whatsapp.select_contact_Achtivity">
     >
 
     <com.google.android.material.appbar.AppBarLayout

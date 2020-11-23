@@ -1,4 +1,4 @@
-package com.example.whatsapp.message;
+package com.example.whatsapp.MVVM_Chat;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -8,7 +8,7 @@ import android.util.Log;
 import androidx.room.OnConflictStrategy;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.whatsapp.MainActivity;
+import com.example.whatsapp.MVVM_conversations.ConversationRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class Message {
 
     public static boolean create_message_table(String conversationNumber) {
 
-        SupportSQLiteDatabase sdb = MainActivity.database.getOpenHelper().getWritableDatabase();
+        SupportSQLiteDatabase sdb = ConversationRepository.instance.getOpenHelper().getWritableDatabase();
         try {
             sdb.execSQL("CREATE TABLE IF NOT EXISTS " + "T" + conversationNumber  + " (id  INTEGER  PRIMARY KEY AUTOINCREMENT, content   TEXT ,MessageWriter TEXT, Time TEXT)");
         } catch (SQLiteException e) {
@@ -43,7 +43,7 @@ public class Message {
     }
 
     public static void Insert_message_to_table(String conversationNumber, Message message) {
-        SupportSQLiteDatabase sdb = MainActivity.database.getOpenHelper().getWritableDatabase();
+        SupportSQLiteDatabase sdb = ConversationRepository.instance.getOpenHelper().getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("content",message.content);
         cv.put("MessageWriter",message.MessageWriter);
@@ -54,7 +54,7 @@ public class Message {
     }
 
     public static List<Message> get_all_messages(String conversationNumber) {
-        SupportSQLiteDatabase sdb = MainActivity.database.getOpenHelper().getWritableDatabase();
+        SupportSQLiteDatabase sdb = ConversationRepository.instance.getOpenHelper().getWritableDatabase();
         Cursor cursor = sdb.query("SELECT * FROM " + "T"+conversationNumber,null);
         List<Message> messages = new ArrayList<Message>();
         if (cursor.moveToFirst()){

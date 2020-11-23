@@ -1,4 +1,4 @@
-package com.example.whatsapp.message;
+package com.example.whatsapp.MVVM_Chat;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +43,7 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.messageViewHol
         }
     }
 
-    List<Message> Messages = Arrays.asList();
+    private List<Message> Messages = Arrays.asList();
 
 
     @NonNull
@@ -77,19 +77,13 @@ public class chatAdapter extends RecyclerView.Adapter<chatAdapter.messageViewHol
     }
 
 
-    public void reload(String ConversationId)
-    {
-        Messages = Message.get_all_messages(ConversationId);
-        notifyDataSetChanged();
 
-    }
 
-    public void new_message(Message message)
+    public void set_Messages(List<Message> Messages)
     {
-        Messages.add(message);
+        this.Messages = Messages;
         notifyDataSetChanged();
     }
-
 
 
 }

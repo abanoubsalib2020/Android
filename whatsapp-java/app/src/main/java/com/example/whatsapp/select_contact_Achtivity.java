@@ -13,12 +13,16 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProviders;
 
-import com.example.whatsapp.message.Chat_Activity;
-import com.example.whatsapp.message.Message;
+import com.example.whatsapp.MVVM_conversations.Conversation;
+import com.example.whatsapp.MVVM_conversations.ConversationViewModel;
+import com.example.whatsapp.MVVM_Chat.Chat_Activity;
+import com.example.whatsapp.MVVM_Chat.Message;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class select_contact extends AppCompatActivity {
+public class select_contact_Achtivity extends AppCompatActivity {
+    private ConversationViewModel viewmodel;
     ConstraintLayout new_contact ;
     ViewGroup viewGroup;
     View user;
@@ -27,6 +31,10 @@ public class select_contact extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_contact);
+
+        viewmodel = ViewModelProviders.of(this).get(ConversationViewModel.class);
+        viewmodel.set_my_number(getIntent().getStringExtra("mynumber"));
+
         new_contact = findViewById(R.id.new_content);
         new_contact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,20 +70,24 @@ public class select_contact extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EditText userName = view.findViewById(R.id.username_new_user);
-                        final EditText userNumber = view.findViewById(R.id.usernumber_new_user);
-
-                        if(userNumber.getText().toString().equals("") == false && userName.getText().toString().equals("") == false)
-                            if(MainActivity.database.getConversationDao().get_Certain_conversations(userNumber.getText().toString()) == null) {
-                                MainActivity.database.getConversationDao().Create_Conversation(userName.getText().toString(), userNumber.getText().toString(), null);
-                                Message.create_message_table(userNumber.getText().toString());
+                        EditText userNameEditText = view.findViewById(R.id.username_new_user);
+                        EditText userNumberEditText = view.findViewById(R.id.usernumber_new_user);
+                        final String UserNumber = userNumberEditText.getText().toString();
+                        final String UserName = userNameEditText.getText().toString();
+                        if(UserNumber.equals("") == false && UserName.equals("") == false)
+                            if(viewmodel.Get_Conversation(UserNumber) == null) {
+                                Conversation conversation = new Conversation(UserNumber,"",UserName,"");
+                                viewmodel.Create_Conversation(conversation);
+                                Message.create_message_table(UserNumber);
                             }
-                        conversation_name.setText(userName.getText().toString());
+                        conversation_name.setText(UserName);
                         user.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(v.getContext(), Chat_Activity.class);
-                                intent.putExtra("conversationNumber",userNumber.getText().toString());
+                                intent.putExtra("conversationNumber",UserNumber);
+                                intent.putExtra("conversationName",UserName);
+
                                 v.getContext().startActivity(intent);
                             }
                         });

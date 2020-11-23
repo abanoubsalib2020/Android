@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class welcome extends AppCompatActivity {
+import com.example.whatsapp.MVVM_conversations.MainActivity;
+
+public class Get_INFO_Activity extends AppCompatActivity {
     TextView textView;
     Button button ;
     EditText editText;
@@ -32,9 +34,9 @@ public class welcome extends AppCompatActivity {
                         SharedPreferences.Editor edit = sharedPref.edit();
                         edit.putString("mynumber", number);
                         edit.commit();
-                        Intent i = new Intent(welcome.this, MainActivity.class);
+                        Intent i = new Intent(Get_INFO_Activity.this, MainActivity.class);
                         i.putExtra("mynumber", number);
-                        welcome.this.startActivity(i);
+                        Get_INFO_Activity.this.startActivity(i);
                     }else
                     {
 

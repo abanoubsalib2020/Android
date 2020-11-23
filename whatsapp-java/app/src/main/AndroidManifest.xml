@@ -9,16 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.whatsapp.select_contact" android:noHistory="true"></activity>
-        <activity android:name="com.example.whatsapp.welcome" android:noHistory="true">
+        <activity android:name="com.example.whatsapp.select_contact_Achtivity" android:noHistory="true"></activity>
+        <activity android:name="com.example.whatsapp.Get_INFO_Activity" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.whatsapp.message.Chat_Activity" />
-        <activity android:name="com.example.whatsapp.MainActivity" />
+        <activity android:name="com.example.whatsapp.MVVM_Chat.Chat_Activity" />
+        <activity android:name="com.example.whatsapp.MVVM_conversations.MainActivity" />
     </application>
 
 </manifest>
